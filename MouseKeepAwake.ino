@@ -1,4 +1,7 @@
 /*
+
+ Note to self:  PICK "Leonardo" from the Tools->Board menu!
+
  Controls the mouse from five pushbuttons on an Arduino Leonardo, Micro or Due.
 
  The mouse movement is always relative. This sketch reads
@@ -16,6 +19,8 @@ void setup() { // initialize the buttons' inputs:
   // initialize mouse control:
   Mouse.begin();
   pinMode(LED_PIN, OUTPUT);
+  
+  delay(1500); // Wait 15 seconds before doing anything!
 }
 
 
@@ -34,10 +39,18 @@ void flash(){
 }
 
 void loop() {
+  Serial.println("Start loop");
   // Every 1 mins just jiggle the mouse
-  delay(60000);
+  int minutes = random(1,10);
+  Serial.print("Sleeping for ");
+  Serial.print(minutes);
+  Serial.println(" minutes.");
+  for(int i = 0; i<=minutes; i++) {
+    delay(60000);
+    // delay(1000);  /// FOR DEBUGGING ONLY!
+  }
   flash();
-  Mouse.move(0,10);
+  Mouse.move(0, 10);
   delay(10);
   Mouse.move(0, -10);
   
@@ -74,7 +87,10 @@ void loop() {
         blink_led();
         Mouse.click(MOUSE_LEFT);
         break;
-    }
+      default:
+        Serial.print("Unknown command.  \nDirections: udlr, \nButtons: m,  \nSleep 30 sec: x\n");
+        break;
+     }
   }
 }
 
